@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.EmployeeMapper">
+	<resultMap id="employeeRsultMap"
+		type="com.example.demo.dto.Employee">
+		<id column="id" property="id" jdbcType="INTEGER"></id>
+		<result column="name" property="name" jdbcType="VARCHAR"></result>
+		<result column="email" property="email" jdbcType="VARCHAR"></result>
+		<result column="address" property="address" jdbcType="VARCHAR"></result>
+		<result column="phoneno" property="phoneno" jdbcType="INTEGER"></result>
+	</resultMap>
+
+	<select id="getEmployeeList" resultMap="employeeResultMap">
+		SELECT
+		id,name,email,address,phoneno from employee
+	</select>
+
+	<select id="getEmployeeById" resultMap="employeeResultMap"
+		parameterType="int">
+		SELECT * from employee
+		where id = #{id}
+	</select>
+
+	<insert id="getInsertEmployee"
+		parameterType="com.example.demo.dto.Employee" useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO Employee
+		<trim prefix="(">
+			<if test="name != null">name</if>
+			<if test="email != null">,email</if>
+			<if test="address != null">,address</if>
+			<if test="phoneno != null">,phoneno</if>
+		</trim>
+		)
+		VALUES
+		<trim prefix="(">
+			<if test="name != null">
+				#{name}
+			</if>
+			<if test="email != null">,#{email}</if>
+			<if test="address != null">,#{address}</if>
+			<if test="phoneno != null">#{phoneno}</if>
+		</trim>
+		)
+	</insert>
+
+	<update id="updateEmployee"
+		parameterType="com.example.demo.dto.Employee">
+		UPDATE
+		Employee
+		SET
+		<if test="name != null">
+			name = #{name}
+		</if>
+		<if test="email != null">
+			,email = #{email}
+		</if>
+		<if test="address != null">
+			,address = #{address}
+		</if>
+	</update>
+
+	<delete id="deleteEmployee" parameterType="id">
+		delete from Employee where id = #{id}
+	</delete>
+</mapper>
